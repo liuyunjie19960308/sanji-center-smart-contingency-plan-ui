@@ -1,0 +1,214 @@
+<script lang="ts" name="{{pascalCase name}}" setup>
+import { ElMessageBox, ElMessage, ElLoading } from 'element-plus';
+import formJson from './formConfig/formJson.json';
+import { handleBlobFile } from '@cqdcg/admin/utils/other';
+import Start from '@cqdcg/admin/views/flow/form/tools/startFlow';
+
+const router = useRouter();
+
+const tableColumns = [
+	{ prop: 'xxx', label: 'xxxx' },
+];
+const tableConfig = {
+  multiple: true,
+  rowKey: 'xxxx',
+  request: null,
+}
+
+// 配置搜索
+const formData = {};
+
+const optionData = {};
+
+// 配置form 表单
+const formConfig = {
+	title: '业务事项编目',
+	formJson,
+	formData,
+	optionData,
+}
+const DTableRef = ref();
+
+const handleOperate = (operateType: string, data: any) => {
+	switch (operateType) {
+		case 'view':
+			// 查看
+			break;
+		case 'add':
+			// 新增
+			break;
+		case 'edit':
+			// 编辑
+			break;
+		case 'submit':
+			handleSubmit(data.bicgId);
+			break;
+		case 'multipleSubmit':
+			if (!selectValue.value || selectValue.value.length === 0) {
+				ElMessage.warning('请选择提交审核的事项');
+				return;
+			}
+			const nonEditDataArr: any[] = selectValue.value.filter((i: any) => i.businessItemStatus !== 6);
+			if (nonEditDataArr.length > 0) {
+				ElMessage.warning('只能选择待提交状态的事项');
+				return;
+			}
+			const submitIdArr: string[] = selectValue.value.map((i: any) => i.bicgId);
+			handleSubmitAll(submitIdArr);
+			break;
+		case 'delete':
+			handleDelete(data.bicgId);
+			break;
+		case 'multipleDelete':
+			if (!selectValue.value || selectValue.value.length === 0) {
+				ElMessage.warning('请选择批量删除的事项');
+				return;
+			}
+			let nonEditDataArr1: any[] = selectValue.value.filter((i: any) => i.businessItemStatus !== 6);
+			if (nonEditDataArr1.length > 0) {
+				ElMessage.warning('只能选择待提交状态的事项进行删除');
+				return;
+			}
+			const deleteIdArr: string[] = selectValue.value.map((i: any) => i.bicgId);
+			handleDelete(deleteIdArr);
+			break;
+		case 'export':
+			if (!selectValue.value || selectValue.value.length === 0) {
+				ElMessage.warning('请选择需要导出的事项');
+				return;
+			}
+			const dataArr: any[] = selectValue.value.map((i: any) => i.bicgId);
+			handleExport(dataArr);
+			break;
+		default:
+			break;
+	}
+};
+
+//获取选择的值
+const selectValue = ref([]);
+const getSelectValue = (value: any) => {
+	if (Array.isArray(value)) {
+		selectValue.value = value;
+	}
+};
+
+// 提交
+const startRef = ref();
+
+const handleSubmit = (id: string) => {
+	//业务代码提交成功后，使用该方法打开弹窗。
+	startRef.value.handle({
+		flowName: '业务事项提交',
+		businessKey: id,
+		paramMap: {},
+	});
+};
+const submitPass = () => {
+	DTableRef.value.getTableData();
+};
+
+// 批量提交
+const handleSubmitAll = (idArr: string[]) => {
+	ElMessageBox.confirm('备注', '确认提交审核？', {
+		confirmButtonText: '提交',
+		cancelButtonText: '取消',
+		type: '',
+		showInput: true,
+		inputType: 'textarea',
+	}).then(({ value }) => {
+		const loading = ElLoading.service({
+			lock: true,
+			text: '提交中...',
+		});
+    // 处理提交接口逻辑
+
+		// loading.close();
+	});
+};
+
+// 删除
+const handleDelete = (idArr: any) => {
+	ElMessageBox.confirm('确定删除?', '提示信息', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		type: 'warning',
+	}).then(() => {
+		const loading = ElLoading.service({
+			lock: true,
+			text: '删除中...',
+		});
+		//  处理删除逻辑
+		// loading.close();
+	});
+};
+
+//设置颜色
+const setColor = (type: Number) => {
+	switch (type) {
+		case 6:
+			return 'edit-tag';
+		case 2:
+		case 3:
+			return 'wait-tag';
+		case 4:
+		case 5:
+			return 'refuse-tag';
+		case 1:
+			return 'agree-tag';
+		default:
+			break;
+	}
+};
+
+// 导出
+const handleExport = (idArr: string[]) => {
+	const loading = ElLoading.service({
+		lock: true,
+		text: '导出中...',
+	});
+	
+  //  处理导出逻辑
+	// loading.close();
+};
+
+onMounted(async () => {
+	// DTableRef.value.setFormConfig({
+	//	title: '业务事项编目',
+	// 	formJson: formJson,
+	// 	formData,
+	// 	optionData,
+	// });
+});
+</script>
+
+<template>
+	<div class="hy-container">
+		<DTable @sendSelectValue="getSelectValue" :tableConfig="tableConfig" :tableColumns="tableColumns" :formConfig="formConfig" ref="DTableRef">
+			<template #tableHeader>
+				<el-button type="primary" @click="handleOperate('add')" icon="Plus">新增</el-button>
+				<el-button type="primary" @click="handleOperate('multipleSubmit')" icon="upload">批量提交</el-button>
+				<el-button type="danger" @click="handleOperate('multipleDelete')" icon="delete">批量删除</el-button>
+				<el-button @click="handleOperate('export')" icon="download">导出</el-button>
+			</template>
+			<template #operation>
+				<el-table-column fixed="right" label="操作" width="260">
+					<template #default="{ row }">
+						<div class="flex items-center w-full">
+							<el-button text type="primary" icon="View" @click="handleOperate('view', row)">查看</el-button>
+							<el-button text type="primary" icon="edit-pen" @click="handleOperate('edit', row)">编辑</el-button>
+							<el-button text type="primary" icon="upload" @click="handleOperate('submit', row)" v-if="[6].includes(row.businessItemStatus)"
+								>提交</el-button
+							>
+							<el-button text type="danger" icon="delete" @click="handleOperate('delete', row)" v-if="[6].includes(row.businessItemStatus)"
+								>删除</el-button
+							>
+						</div>
+					</template>
+				</el-table-column>
+			</template>
+		</DTable>
+		<Start ref="startRef" :boxConfig="{ title: '发起流程', width: '40%' }" @submitPass="submitPass"></Start>
+	</div>
+</template>
+<style scoped lang="scss"></style>

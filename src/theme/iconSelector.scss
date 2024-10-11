@@ -1,0 +1,36 @@
+/* Popover 弹出框(图标选择器)
+------------------------------- */
+.icon-selector-popper {
+	padding: 0 !important;
+
+	.icon-selector-warp {
+		position: relative;
+		height: 260px;
+		overflow: hidden;
+
+		.icon-selector-warp-title {
+			position: absolute;
+			left: 15px;
+			height: 40px;
+			line-height: 40px;
+		}
+
+		.el-tabs__header {
+			display: flex;
+			justify-content: flex-end;
+			padding: 0 15px;
+			margin: 0 !important;
+			border-bottom: 1px solid var(--el-border-color-light);
+
+			.el-tabs__nav-wrap {
+				&::after {
+					height: 0 !important;
+				}
+
+				.el-tabs__item {
+					padding: 0 5px !important;
+				}
+			}
+		}
+	}
+}

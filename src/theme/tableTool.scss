@@ -1,0 +1,32 @@
+.table-tool-popper {
+	padding: 0 !important;
+
+	.tool-box {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		height: 40px;
+		color: var(--el-text-color-primary);
+		border-bottom: 1px solid var(--el-border-color-lighter);
+	}
+
+	.tool-sortable {
+		max-height: 303px;
+
+		.tool-sortable-item {
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			padding: 0 12px;
+			color: var(--el-text-color-primary);
+
+			&:hover {
+				background: var(--el-fill-color-lighter);
+			}
+
+			i {
+				opacity: 0.7;
+			}
+		}
+	}
+}

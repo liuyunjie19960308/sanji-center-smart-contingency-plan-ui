@@ -1,4 +1,4 @@
-# admin-startkit
+# dcg-irs-mgt-ui
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin http://23.99.220.137:8443/fornt-end-startkit/admin-startkit.git
+git remote add origin http://23.99.220.137:8443/dcg-software-group/dcg-irs-mgt/frontend-workspace/dcg-irs-mgt-ui.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](http://23.99.220.137:8443/fornt-end-startkit/admin-startkit/-/settings/integrations)
+- [ ] [Set up project integrations](http://23.99.220.137:8443/dcg-software-group/dcg-irs-mgt/frontend-workspace/dcg-irs-mgt-ui/-/settings/integrations)
 
 ## Collaborate with your team
 

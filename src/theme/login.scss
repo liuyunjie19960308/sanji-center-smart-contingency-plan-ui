@@ -1,0 +1,216 @@
+// 用户名密码登录
+.login-content-form {
+	margin-top: 20px;
+
+	@for $i from 1 through 4 {
+		.login-animation#{$i} {
+			opacity: 0;
+			animation-name: error-num;
+			animation-duration: 0.5s;
+			animation-fill-mode: forwards;
+			animation-delay: calc($i / 10) + s;
+		}
+	}
+
+	.login-content-password {
+		display: inline-block;
+		width: 20px;
+		cursor: pointer;
+
+		&:hover {
+			color: #909399;
+		}
+	}
+
+	.login-content-code {
+		width: 100%;
+		padding: 0;
+		font-weight: bold;
+		letter-spacing: 5px;
+	}
+
+	.login-content-submit {
+		width: 100%;
+		margin-top: 15px;
+		font-weight: 300;
+		letter-spacing: 2px;
+	}
+
+	.login-msg {
+		color: var(--el-text-color-placeholder);
+	}
+}
+
+// 社交登录
+.social-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin: 20px 0;
+
+	.box {
+		cursor: pointer;
+	}
+
+	.iconfont {
+		font-size: 30px;
+		color: #fff;
+	}
+
+	.container {
+		$height: 50px;
+
+		display: inline-block;
+		width: $height;
+		height: $height;
+		margin-bottom: 10px;
+		line-height: $height;
+		text-align: center;
+		border-radius: 4px;
+	}
+
+	.title {
+		text-align: center;
+	}
+}
+
+.select-none {
+	user-select: none;
+}
+
+.tenant {
+	position: absolute;
+	top: 0.75rem;
+	right: 1.25rem;
+	z-index: 9;
+}
+
+.mini_qr {
+	position: fixed;
+	right: 2rem;
+	bottom: 1rem;
+	z-index: 1000;
+	padding: 36px;
+
+	img {
+		width: 120px;
+	}
+
+	p {
+		margin-top: 20px;
+		font-size: 12px;
+		color: var(--el-text-color-placeholder);
+		text-align: center;
+	}
+}
+
+.wave {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.login-container {
+	// display: grid;
+	// grid-template-columns: repeat(2, 1fr);
+	// grid-gap: 18rem;
+	display: flex;
+	justify-content: flex-end;
+	width: 100vw;
+	height: 100vh;
+	padding: 0 2rem;
+}
+
+.img {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.img img {
+	z-index: 0;
+	width: 500px;
+}
+
+.login-title {
+	margin-bottom: 32px;
+	font-family: 'PingFang SC', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.login-box {
+	position: absolute;
+	top: 10rem;
+	right: 13rem;
+	display: flex;
+	align-items: center;
+	// width: 30.38rem;
+	height: 36.44rem;
+	text-align: center;
+	background: #fffc;
+	backdrop-filter: blur(0.5rem);
+	border: 0.03rem solid #d4d4d4;
+	border-radius: 0.5rem;
+}
+
+.login-form {
+	width: 400px;
+}
+
+.avatar {
+	width: 350px;
+	height: 80px;
+}
+
+.login-form h2 {
+	margin: 15px 0;
+	font: bold 200% Consolas, Monaco, monospace;
+	color: #999;
+	text-transform: uppercase;
+}
+
+@media screen and (width <= 1180px) {
+	.login-container {
+		grid-gap: 4rem;
+	}
+
+	.login-form {
+		width: 400px;
+	}
+
+	.login-form h2 {
+		margin: 8px 0;
+		font-size: 2.4rem;
+	}
+
+	.img img {
+		width: 360px;
+	}
+
+	.avatar {
+		width: 280px;
+		height: 80px;
+	}
+}
+
+@media screen and (width <= 968px) {
+	.wave {
+		display: none;
+	}
+
+	.img {
+		display: none;
+	}
+
+	.login-container {
+		grid-template-columns: 1fr;
+	}
+
+	.login-box {
+		justify-content: center;
+	}
+}
