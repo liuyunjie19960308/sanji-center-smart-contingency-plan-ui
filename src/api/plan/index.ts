@@ -57,3 +57,12 @@ export const planExportApi = (data: any) => {
 		responseType: 'blob',
 	});
 };
+
+// 下线预案
+export const planOfflineApi = (data: any) => {
+	return service.instance({
+		url: `${modulePath}/api/businessItemCatalog`,
+		method: 'PUT',
+		data: data,
+	});
+};

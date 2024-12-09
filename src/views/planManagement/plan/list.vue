@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 import { ElMessageBox, ElMessage } from "element-plus";
-import { fetchList, planDelApi, planExportApi } from "../../../api/plan/index";
+import { fetchList, planDelApi, planExportApi, planOfflineApi } from "../../../api/plan/index";
 import formJson from "./formConfig/search.json";
 import { handleBlobFile } from "@cqdcg/admin/utils/other";
 
 const tableColumns = computed(() => {
   return [
     { prop: "name", label: "预案名称" },
-    { prop: "code", label: " 预案编码", width: 350 },
-    { prop: "type", label: "类型", width: 200 },
+    { prop: "code", label: " 预案编码" },
+    { prop: "type", label: "类型" },
     { prop: "updateTime", label: "更新时间", width: 200 },
     {
       prop: "businessItemStatus",
       label: "状态",
       slot: "statusSlot",
-      width: 140,
+      width: 150,
       fixed: "right",
     },
   ];
@@ -48,10 +48,9 @@ const formConfig = computed(() => ({
 }));
 
 const statusConfig = ref<any>({
-  1: "审核通过",
-  2: "审核中",
-  3: "审核驳回",
-  6: "待提交",
+  1: "未生效",
+  2: "已生效",
+  3: "升级中",
 });
 
 // 操作
@@ -62,6 +61,12 @@ const handleOperate = (operateType: string, data: any = {}) => {
     case "config":
       break;
     case "add":
+    editDialogRef.value.visible = true;
+			editDialogRef.value.title = '新增';
+			editDialogRef.value.formData = {
+				parentId: data.itemTypeId ? data.itemTypeId : '',
+			};
+			break;
       break;
     case "edit":
       break;
@@ -73,10 +78,10 @@ const handleOperate = (operateType: string, data: any = {}) => {
     case "import":
       break;
     case "export":
-      const dataArr: any[] = [data.id];
-      handleExport(dataArr);
+      handleExport([data.id]);
       break;
     case 'offline':
+    handleOffline(data.id);
         break;
     default:
       break;
@@ -94,7 +99,7 @@ const getSelectValue = (value: any) => {
 // 删除
 const deleteLoading = ref(false);
 const handleDelete = (idArr: any) => {
-  ElMessageBox.confirm("确定删除?", "提示信息", {
+  ElMessageBox.confirm("是否确定删除此智能预案?", "提示信息", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     type: "warning",
@@ -114,6 +119,29 @@ const handleDelete = (idArr: any) => {
       });
   });
 };
+// 下线
+const offlineLoading = ref(false);
+const handleOffline = (id: string) => {
+    ElMessageBox.confirm("是否确定下线此预案?", "提示信息", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    offlineLoading.value = true;
+    planOfflineApi(id)
+      .then((res: any) => {
+        if (res.ok) {
+          ElMessage.success("操作成功");
+          DTableRef.value.getTableData();
+        } else {
+          ElMessage.error(res.msg);
+        }
+      })
+      .finally(() => {
+        offlineLoading.value = false;
+      });
+  });
+}
 
 // 编辑
 const handleEdit = (data: any) => {};
@@ -149,12 +177,12 @@ const handleExport = (idArr: string[]) => {
 };
 
 onMounted(async () => {
-  DTableRef.value.setFormConfig({
-    title: "智能预案管理",
-    formJson: formJson,
-    formData: formData.value,
-    optionData: {},
-  });
+//   DTableRef.value.setFormConfig({
+//     title: "智能预案管理",
+//     formJson: formJson,
+//     formData: formData.value,
+//     optionData: {},
+//   });
 });
 </script>
 
@@ -171,6 +199,7 @@ onMounted(async () => {
         <el-button
           type="primary"
           plain
+          v-auth="'plan_add'"
           @click="handleOperate('add')"
           icon="Plus"
           >创建智能预案</el-button
@@ -178,16 +207,17 @@ onMounted(async () => {
         <el-button
           type="primary"
           plain
+          v-auth="'plan_copy'"
           @click="handleOperate('copy')"
-          icon="upload"
-          :loading="submitLoading"
+          icon="DocumentCopy"
           >复制智能预案</el-button
         >
         <el-button
           type="primary"
           plain
+          v-auth="'plan_import'"
           @click="handleOperate('import')"
-          icon="download"
+          icon="Upload"
           >导入</el-button
         >
       </template>
@@ -203,18 +233,22 @@ onMounted(async () => {
               <el-button
                 text
                 type="primary"
+                v-auth="'plan_edit'"
                 @click="handleOperate('edit', row)"
                 >编辑</el-button
               >
               <el-button
                 text
                 type="primary"
+                v-if="row.status === 1"
                 @click="handleOperate('offline', row)"
+                :loading="offlineLoading"
                 >下线</el-button
               >
               <el-button
                 text
                 type="primary"
+                v-auth="'plan_config'"
                 @click="handleOperate('config', row)"
                 :loading="submitLoading"
                 >配置</el-button
@@ -222,13 +256,15 @@ onMounted(async () => {
               <el-button
                 text
                 type="primary"
-                @click="handleOperate('export', row)"
+                v-auth="'plan_export'"
+                @click="exportLoading('export', row)"
                 :loading="submitLoading"
                 >导出</el-button
               >
               <el-button
                 text
                 type="danger"
+                v-auth="'plan_delete'"
                 @click="handleOperate('delete', row)"
                 :loading="deleteLoading"
                 >删除</el-button
