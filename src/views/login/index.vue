@@ -8,12 +8,12 @@
 					<div class="my-3 text-6xl font-semibold">{{ getThemeConfig.globalTitle }}</div>
 					<div class="flex self-center justify-center">
 						<div class="px-6 mx-auto rounded-3xl w-96">
-							<div class="space-y-0">
-								<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
-								<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
-								<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
-								<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
-							</div>
+							<!-- <div class="space-y-0"> -->
+							<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
+							<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
+							<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
+							<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
+							<!-- </div> -->
 						</div>
 					</div>
 				</div>
@@ -100,3 +100,49 @@ onMounted(() => {
 	NextLoading.done();
 });
 </script>
+<style lang="scss" scoped>
+.login-container {
+	padding: 0;
+
+	.login-box {
+		top: 50%;
+		right: 21.66%;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 486px;
+		height: 583px;
+		padding: 56px 48px 72px;
+		// height: 40rem;
+		transform: translateY(-50%);
+
+		.login-form {
+			width: 100%;
+			height: 100%;
+
+			.text-6xl {
+				font-family: 'Alimama ShuHeiTi';
+				font-size: 28px;
+				line-height: 28px;
+			}
+
+			.my-3 {
+				margin-top: 0;
+				margin-bottom: 47px;
+			}
+
+			.px-6 {
+				padding: 0;
+			}
+		}
+	}
+
+	/* 屏幕宽度大于或等于 1200px */
+	@media screen and (width <= 1600px) {
+		.login-box {
+			right: 17%;
+		}
+	}
+}
+</style>

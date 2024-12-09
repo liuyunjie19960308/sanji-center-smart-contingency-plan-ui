@@ -77,8 +77,8 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				},
 				'/api': {
 					// target: env.VITE_ADAdmin@1NBi*&^52MIN_PROXY_PATH, // 目标服务器地址
-					// target: 'http://23.99.220.142:31100/api', //vpn 服务器
-					target: 'https://mock1.router.fishliu.com/mock/12', // mock 服务器
+					target: 'http://23.99.220.142:31100/api', //vpn 服务器
+					// target: 'https://mock1.router.fishliu.com/mock/12', // mock 服务器
 					// target: 'http://192.168.5.52:9999', //黄彬洋
 					// target: 'http://192.168.5.28:9999', //吴军
 					// target: 'http://192.168.5.124:9999', //吴振宁
