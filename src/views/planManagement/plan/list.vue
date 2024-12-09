@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 import { ElMessageBox, ElMessage } from "element-plus";
-import { fetchList, planDelApi, planExportApi, planOfflineApi } from "../../../api/plan/index";
+import {
+  fetchList,
+  planDelApi,
+  planExportApi,
+  planOfflineApi,
+} from "../../../api/plan/index";
 import formJson from "./formConfig/search.json";
 import { handleBlobFile } from "@cqdcg/admin/utils/other";
+import EditDialog from "/@/views/planManagement/components/EditDialog.vue";
+import ImportDialog from "/@/views/planManagement/components/ImportDialog.vue";
 
+const importUrl = ref("");
 const tableColumns = computed(() => {
   return [
     { prop: "name", label: "预案名称" },
@@ -56,33 +64,49 @@ const statusConfig = ref<any>({
 // 操作
 const DTableRef = ref();
 const router = useRouter();
+// 编辑弹窗
+const editDialogRef = ref();
+// 导入弹窗
+const importDialogRef = ref();
 const handleOperate = (operateType: string, data: any = {}) => {
   switch (operateType) {
     case "config":
       break;
     case "add":
-    editDialogRef.value.visible = true;
-			editDialogRef.value.title = '新增';
-			editDialogRef.value.formData = {
-				parentId: data.itemTypeId ? data.itemTypeId : '',
-			};
-			break;
+      editDialogRef.value.visible = true;
+      editDialogRef.value.isCopy = false;
+      editDialogRef.value.title = "创建智能预案";
       break;
     case "edit":
+      editDialogRef.value.visible = true;
+      editDialogRef.value.isCopy = false;
+      editDialogRef.value.title = "编辑智能预案";
+      editDialogRef.value.formData = JSON.parse(JSON.stringify(data));
       break;
     case "copy":
+      editDialogRef.value.visible = true;
+      editDialogRef.value.isCopy = true;
+      editDialogRef.value.title = "复制智能预案";
       break;
     case "delete":
       handleDelete(data.id);
       break;
     case "import":
+      importDialogRef.value.show();
       break;
     case "export":
-      handleExport([data.id]);
+      handleExport(data);
       break;
-    case 'offline':
-    handleOffline(data.id);
-        break;
+    case "offline":
+      const isUse = false;
+      if (isUse) {
+        ElMessage.warning("当前预案正在流转中，不可修改，请预案完结后再操作");
+        return;
+      } else {
+        handleOffline(data.id);
+      }
+
+      break;
     default:
       break;
   }
@@ -122,7 +146,7 @@ const handleDelete = (idArr: any) => {
 // 下线
 const offlineLoading = ref(false);
 const handleOffline = (id: string) => {
-    ElMessageBox.confirm("是否确定下线此预案?", "提示信息", {
+  ElMessageBox.confirm("是否确定下线此预案?", "提示信息", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     type: "warning",
@@ -141,7 +165,7 @@ const handleOffline = (id: string) => {
         offlineLoading.value = false;
       });
   });
-}
+};
 
 // 编辑
 const handleEdit = (data: any) => {};
@@ -164,11 +188,11 @@ const setColor = (type: Number) => {
 
 // 导出
 const exportLoading = ref(false);
-const handleExport = (idArr: string[]) => {
+const handleExport = (data: any) => {
   exportLoading.value = true;
-  planExportApi(idArr)
+  planExportApi([data.id])
     .then((res: any) => {
-      handleBlobFile(res, "智能预案管理.xlsx");
+      handleBlobFile(res, data.name + ".json");
     })
     .finally(() => {
       ElMessage.success("导出成功");
@@ -177,12 +201,12 @@ const handleExport = (idArr: string[]) => {
 };
 
 onMounted(async () => {
-//   DTableRef.value.setFormConfig({
-//     title: "智能预案管理",
-//     formJson: formJson,
-//     formData: formData.value,
-//     optionData: {},
-//   });
+  //   DTableRef.value.setFormConfig({
+  //     title: "智能预案管理",
+  //     formJson: formJson,
+  //     formData: formData.value,
+  //     optionData: {},
+  //   });
 });
 </script>
 
@@ -274,6 +298,15 @@ onMounted(async () => {
         </el-table-column>
       </template>
     </DTable>
+    <!-- 创建、编辑、复制弹窗 -->
+    <edit-dialog ref="editDialogRef" @close="handleClose"></edit-dialog>
+    <!-- 导入弹窗 -->
+    <import-dialog
+      @refreshDataList="handleClose"
+      ref="importDialogRef"
+      title="导入智能预案"
+      :url="importUrl"
+    />
   </div>
 </template>
 <style scoped lang="scss"></style>
