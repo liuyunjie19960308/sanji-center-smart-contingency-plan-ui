@@ -1,6 +1,14 @@
 <template>
-	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="handleVerify">
-		<el-form-item class="login-animation1" prop="username">
+	<el-form
+		size="large"
+		class="login-content-form"
+		ref="loginFormRef"
+		:rules="loginRules"
+		:model="state.ruleForm"
+		@keyup.enter="handleVerify"
+		label-position="top"
+	>
+		<el-form-item class="login-animation1" prop="username" label="账号">
 			<el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon">
@@ -9,7 +17,7 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="password">
+		<el-form-item class="login-animation2" prop="password" label="密码">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
@@ -31,7 +39,7 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="code" v-if="verifyImageEnable">
+		<el-form-item class="login-animation2" prop="code" v-if="verifyImageEnable" label="验证码">
 			<el-col :span="15">
 				<el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="state.ruleForm.code" clearable autocomplete="off">
 					<template #prefix>
@@ -43,10 +51,10 @@
 			</el-col>
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
-				<img :src="imgSrc" @click="getVerifyImageCode" />
+				<img style="width: 128px; height: 40px" :src="imgSrc" @click="getVerifyImageCode" />
 			</el-col>
 		</el-form-item>
-		<el-form-item class="mt-4 login-animation4">
+		<el-form-item class="login-animation4">
 			<el-button type="primary" class="rounded-lg login-content-submit" v-waves @click="handleVerify" :loading="loading">
 				<span class="font-semibold tracking-wide">{{ $t('password.accountBtnText') }}</span>
 			</el-button>
@@ -163,3 +171,45 @@ onMounted(() => {
 	}
 });
 </script>
+<style lang="scss" scoped>
+.login-content-form {
+	margin-top: 0 !important;
+
+	:deep(.el-form-item) {
+		margin-bottom: 24px !important;
+
+		.el-form-item__label {
+			width: 100%;
+			height: auto !important;
+			margin-bottom: 12px !important;
+			font-size: 16px;
+			font-weight: 500;
+			line-height: 16px;
+			color: #303133;
+
+			&::before {
+				display: none;
+			}
+		}
+
+		.login-content-submit {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: 24px;
+			background-color: #4655f5;
+
+			.font-semibold {
+				font-size: 18px;
+				line-height: 18px;
+			}
+		}
+	}
+
+	.text-primary {
+		font-size: 16px;
+		line-height: 16px;
+		color: #4655f5;
+	}
+}
+</style>

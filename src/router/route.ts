@@ -91,7 +91,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		path: '/login',
 		name: 'staticRoutes.login',
 		// 默认为模版中的login页面
-		component: () => import('@cqdcg/admin/views/login/index'),
+		component: () => import('/@/views/login/index'),
 		//自定义login页面
 		// component: () => import('/@/views/login/index'),
 		meta: {
