@@ -7,6 +7,124 @@
 	width: 100%;
 	height: 100%;
 	overflow-y: auto;
+	background-color: #eff0f6;
+
+	.business-table-container,
+	.business-table-tablayout-container {
+		.mt-2\.5 {
+			display: none;
+		}
+
+		.business-card-container {
+			&:first-child {
+				.el-card {
+					margin: 0 !important;
+					border-bottom: none !important;
+					border-radius: 4px 4px 0 0 !important;
+					box-shadow: none !important;
+
+					.el-card__body {
+						padding-bottom: 0 !important;
+					}
+				}
+			}
+
+			&:last-child {
+				.el-card {
+					margin: 0 !important;
+					border-top: none !important;
+					border-radius: 0 0 4px 4px !important;
+					box-shadow: none !important;
+
+					.el-card__body {
+						padding-top: 12px !important;
+					}
+				}
+			}
+		}
+
+		.el-form {
+			.el-col-5 {
+				min-width: 280px;
+				// max-width: 20%;
+				// flex: 0 0 20%;
+				// flex: 1 0 none;
+				max-width: 320px;
+			}
+
+			.el-form-item__label {
+				font-size: 16px;
+			}
+
+			.el-input {
+				height: 40px;
+			}
+
+			.el-select {
+				height: 40px;
+
+				.el-select__wrapper {
+					min-height: 40px;
+				}
+			}
+
+			.el-date-editor {
+				height: 40px;
+			}
+
+			.el-button {
+				box-sizing: border-box;
+				height: 40px;
+				font-size: 16px;
+			}
+
+			.search-button-wrapper {
+				padding: 0 !important;
+			}
+		}
+
+		.el-table {
+			.el-table__header {
+				.cell {
+					font-size: 16px;
+					color: #909399;
+				}
+
+				.is-last-column {
+					.cell {
+						width: 60px;
+					}
+				}
+			}
+
+			.el-table__body {
+				.cell {
+					font-size: 16px;
+					color: #303133;
+				}
+			}
+		}
+
+		.el-button {
+			box-sizing: border-box;
+			height: 40px;
+			font-size: 16px;
+		}
+
+		.el-button.is-text {
+			height: inherit !important;
+		}
+	}
+
+	.business-table-tablayout-container {
+		.el-tabs__item {
+			background: #f4f4f5;
+		}
+
+		.is-active {
+			background: #fff !important;
+		}
+	}
 }
 
 .el-collapse-item__content {
@@ -14,38 +132,38 @@
 }
 //待认领
 .start-tag {
-	color: #e6a23c;
-	background-color: #fcf6ec;
-	border: 1px solid #faecd8;
+	color: #e6a23c !important;
+	background-color: #fcf6ec !important;
+	border: 1px solid #faecd8 !important;
 }
 //已认领
 .edit-tag {
-	color: #409eff;
-	background-color: #ecf5ff;
-	border: 1px solid #d9ecff;
+	color: #409eff !important;
+	background-color: #ecf5ff !important;
+	border: 1px solid #d9ecff !important;
 }
 
 .wait-tag {
-	color: #f56c6c;
-	background-color: #fef0f0;
-	border: 1px solid #fde2e2;
+	color: #e6a23c !important;
+	background-color: #fcf6ec !important;
+	border: 1px solid #faecd8 !important;
 }
 
 .agree-tag {
-	color: #52c41a;
-	background-color: #f6ffed;
-	border: 1px solid #b7eb8f;
+	color: #67c23a !important;
+	background-color: #f0f9eb !important;
+	border: 1px solid #e1f3d8 !important;
 }
 
 .refuse-tag {
-	color: #f5222d;
-	background-color: #fef0ef;
-	border: 1px solid #ffa39e;
+	color: #f56c6c !important;
+	background-color: #fef0f0 !important;
+	border: 1px solid #fde2e2 !important;
 }
 //蓝色按钮
 .blue-button {
-	color: white;
-	background-color: var(--el-color-primary);
+	color: white !important;
+	background-color: var(--el-color-primary) !important;
 }
 
 .red-button {
@@ -64,4 +182,9 @@
 	color: #262634;
 	background-color: #fff;
 	border: 1px #cecece solid;
+}
+
+.middle-col {
+	display: flex !important;
+	justify-content: center !important;
 }
